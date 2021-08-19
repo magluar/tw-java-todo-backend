@@ -30,4 +30,8 @@ public class TodoListService {
         todoItemDone.setDone(doneRequest.getDone());
         return todoItemDone;
     }
+
+    public void deleteTodoItem(Integer id) {
+        todoListRepository.deleteById(id);
+    }
 }
