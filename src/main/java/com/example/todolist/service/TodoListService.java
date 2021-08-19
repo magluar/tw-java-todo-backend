@@ -19,4 +19,15 @@ public class TodoListService {
     public Todo addToDoItem(Todo todo) {
         return todoListRepository.save(todo);
     }
+
+    public Todo updateTodoItem(Integer id, Todo doneRequest) {
+        Todo todoItemDone = todoListRepository.findById(id).orElse(null);
+        assert todoItemDone != null;
+        return todoListRepository.save(updateTodoItemToDone(todoItemDone, doneRequest));
+    }
+
+    private Todo updateTodoItemToDone(Todo todoItemDone, Todo doneRequest) {
+        todoItemDone.setDone(doneRequest.getDone());
+        return todoItemDone;
+    }
 }
