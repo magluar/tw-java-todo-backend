@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -43,5 +44,24 @@ public class TodoIntegrationTest {
                 .andExpect(jsonPath("$[0].id").value(todo.getId()))
                 .andExpect(jsonPath("$[0].text").value("test text"))
                 .andExpect(jsonPath("$[0].done").value("false"));
+    }
+
+    @Test
+    void should_return_added_todo_item_when_call_addTodoItem_api() throws Exception {
+        //given
+        String todoItem = "{\n" +
+                "    \"text\": \"random text haha\",\n" +
+                "    \"done\": false\n" +
+                "}";
+
+        //when
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(todoItem))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value("random text haha"))
+                .andExpect(jsonPath("$.done").value("false"));
     }
 }
