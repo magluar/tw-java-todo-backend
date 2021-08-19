@@ -85,4 +85,21 @@ public class TodoIntegrationTest {
                 .andExpect(jsonPath("$.text").value("abcd1234"))
                 .andExpect(jsonPath("$.done").value("true"));
     }
+
+
+    @Test
+    void should_return_status_ok_when_call_deleteTodoItem_api() throws Exception {
+        //given
+        final Todo todo1 = new Todo("abcd1234", false);
+        final Todo todo2 = new Todo("zxcv5678", false);
+        final Todo todo3 = new Todo("1234abcd", false);
+        List<Todo> todos = Lists.newArrayList(todo1, todo2, todo3);
+        todoListRepository.saveAll(todos);
+
+        //when
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/todos/{id}", todo1.getId()))
+                .andExpect(status().isOk());
+    }
 }
