@@ -2,6 +2,10 @@ package com.example.todolist.integration;
 
 import com.example.todolist.model.Todo;
 import com.example.todolist.repository.TodoListRepository;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +24,11 @@ public class TodoIntegrationTest {
     @Autowired
     private TodoListRepository todoListRepository;
 
+    @BeforeEach
+    void deleteAll(){
+        todoListRepository.deleteAll();
+    }
+
     @Test
     void should_return_all_todo_items_when_call_getAllTodos_api() throws Exception {
         //given
@@ -31,6 +40,8 @@ public class TodoIntegrationTest {
         //then
         mockMvc.perform(MockMvcRequestBuilders.get("/todos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(todo.getId()));
+                .andExpect(jsonPath("$[0].id").value(todo.getId()))
+                .andExpect(jsonPath("$[0].text").value("test text"))
+                .andExpect(jsonPath("$[0].done").value("false"));
     }
 }
